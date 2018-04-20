@@ -1,5 +1,9 @@
 package br.com.wellingtoncosta.exporttofile.gui;
 
+import br.com.wellingtoncosta.exporttofile.data.ContactCsvFiler;
+import br.com.wellingtoncosta.exporttofile.data.ContactFiler;
+import br.com.wellingtoncosta.exporttofile.data.ContactJsonFiler;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +14,7 @@ import java.awt.event.ActionListener;
 public class MainJFrame extends JFrame {
 
     private ContactsTable contactsTable;
+    private ContactFiler filer;
 
     public MainJFrame() {
         setTitle("Main");
@@ -45,9 +50,15 @@ public class MainJFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String selected = ExportAsDialog.show();
                 if(selected.equals("CSV")) {
-                    System.out.println("Export contacts as CSV file.");
+                    System.out.println("Exporting contacts as CSV file...");
+                    filer = new ContactCsvFiler();
                 } else {
-                    System.out.println("Export contacts as JSON file.");
+                    System.out.println("Exporting contacts as JSON file...");
+                    filer = new ContactJsonFiler();
+                }
+
+                if(filer.exportAll(contactsTable.getContacts())) {
+                    System.out.println("Contacts exported!");
                 }
             }
         });

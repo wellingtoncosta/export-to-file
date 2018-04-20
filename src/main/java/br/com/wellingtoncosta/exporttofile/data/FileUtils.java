@@ -1,5 +1,8 @@
 package br.com.wellingtoncosta.exporttofile.data;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,20 +15,23 @@ final class FileUtils {
 
     private FileUtils() { }
 
-    public static boolean createFile(String fileName) {
+    public static Path createFile(String fileName) {
         try {
-            if(!fileExists(fileName)) {
-                Files.createFile(getFilePath(fileName));
-            }
-            return true;
+            return Files.createFile(getFilePath(fileName));
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
-    private static boolean fileExists(String fileName) {
-        return Files.exists(getFilePath(fileName));
+    public static void writeToFile(File file, String text) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(text);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static Path getFilePath(String fileName) {
